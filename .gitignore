@@ -1,0 +1,29 @@
+# Dependencies and build output
+node_modules/
+target/
+dist/
+build/
+out-tsc/
+.angular/
+coverage/
+
+# Secrets and local config
+.env
+.env.*
+!.env.example
+
+# IDE / OS
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.iml
+*.iws
+.classpath
+.project
+.settings/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+HELP.md
