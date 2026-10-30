@@ -1,0 +1,83 @@
+/* Tabla, lista de cobros, tira de 30 dias y barras por categoria */
+
+/* Tabla: cabecera sin banda (12px gris), filetes de fila 1px, numeros a la derecha, sin cebra */
+.table { width: 100%; border-collapse: collapse; }
+.table caption { text-align: left; }
+.table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.table tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; padding: 12px 16px; border-bottom: 1px solid var(--rule); }
+.table tbody tr:last-child { border-bottom: 0; }
+.table td, .table th { display: block; padding: 0; text-align: left; font-weight: 400; }
+.table td.cell--name { grid-column: 1; min-width: 0; overflow-wrap: break-word; font-weight: 500; }
+.cell__cyc { display: none; }
+.cell__sub { display: block; font-size: var(--fs-small); font-weight: 400; color: var(--muted); }
+.cell__meta { display: block; font-size: var(--fs-small); font-weight: 400; color: var(--muted); }
+.table td.cell--amount { grid-column: 2; grid-row: 1; text-align: right; white-space: nowrap; font-weight: 700; font-variant-numeric: tabular-nums; }
+.table td.cell--status { grid-column: 2; grid-row: 2; justify-self: end; }
+.table td.cell--cycle, .table td.cell--date { display: none; }
+.table td.cell--actions { grid-column: 1 / -1; display: flex; gap: 4px; justify-content: flex-end; }
+.cell__soon { color: var(--pill-warning-ink); font-weight: 500; }
+
+@media (min-width: 48rem) {
+  .table thead { position: static; width: auto; height: auto; overflow: visible; clip: auto; }
+  .table tr { display: table-row; padding: 0; border-bottom: 0; }
+  .table td, .table th { display: table-cell; padding: 0 16px; vertical-align: middle; height: var(--row-height); }
+  .table th { height: 36px; font-size: var(--fs-small); font-weight: 400; color: var(--muted); border-bottom: 1px solid var(--control); }
+  .table td { border-bottom: 1px solid var(--rule); }
+  .table tbody tr:last-child td { border-bottom: 0; }
+  .table th:first-child, .table td:first-child { padding-left: var(--card-pad); }
+  .table th:last-child, .table td:last-child { padding-right: var(--card-pad); }
+  .table th.num, .table td.cell--amount, .table td.cell--date { text-align: right; }
+  .table td.cell--cycle, .table td.cell--date { display: table-cell; white-space: nowrap; }
+  .table td.cell--cycle { color: var(--muted); }
+  .table td.cell--name { max-width: 22rem; min-width: 10rem; }
+  .table th.col-cycle, .table td.cell--cycle.col-cycle { display: none; }
+  .cell__cyc { display: inline; }
+  .table td.cell--name .cell__meta { display: none; }
+  .table td.cell--actions { display: table-cell; text-align: right; white-space: nowrap; }
+  .table td.cell--actions > * + * { margin-left: 2px; }
+  .table td.cell--status { justify-self: auto; }
+}
+.table tr.is-inactive td.cell--name, .table tr.is-inactive td.cell--amount, .table tr.is-inactive td.cell--date { color: var(--muted); }
+
+/* Proximos cobros: fecha, nombre + ciclo, importe, una accion a un clic */
+.upcoming { display: flex; flex-direction: column; }
+.upcoming__item { display: grid; grid-template-columns: 3.25rem minmax(0, 1fr) auto auto; align-items: center; gap: 12px; min-height: 56px; padding: 6px 0; border-bottom: 1px solid var(--rule); }
+.upcoming__item:last-child { border-bottom: 0; }
+.upcoming__date { font-size: var(--fs-body); font-weight: 500; line-height: 1.2; }
+.upcoming__date span { display: block; font-size: var(--fs-small); font-weight: 400; color: var(--muted); }
+.upcoming__name { min-width: 0; font-weight: 500; }
+.upcoming__sub { font-size: var(--fs-small); color: var(--muted); }
+.upcoming__amount { text-align: right; white-space: nowrap; font-weight: 700; font-variant-numeric: tabular-nums; }
+.upcoming__item.is-first .upcoming__amount { color: var(--data); }
+
+/* Tira de 30 dias: un punto por cobro; la franja marca la ventana del aviso por email (3 dias) */
+.strip { position: relative; height: 44px; margin-bottom: 8px; }
+.strip__zone { position: absolute; left: 0; top: 6px; height: 14px; background: var(--data-soft); }
+.strip__track { position: absolute; left: 0; right: 0; top: 12px; height: 2px; background: var(--control); }
+.strip__dot { position: absolute; top: 9px; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: var(--text); }
+.strip__dot.is-first { top: 7px; width: 12px; height: 12px; margin-left: -6px; background: var(--data); }
+.strip__ticks { position: absolute; left: 0; right: 0; top: 24px; display: flex; justify-content: space-between; font-size: var(--fs-small); color: var(--muted); }
+
+/* Gasto por categoria: una serie, un tono, sin leyenda */
+.catlist { display: flex; flex-direction: column; gap: 14px; }
+.catlist__row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; column-gap: 12px; row-gap: 6px; align-items: baseline; }
+.catlist__name { overflow-wrap: anywhere; }
+.catlist__amount { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+.catlist__pct { min-width: 3ch; text-align: right; color: var(--muted); font-size: var(--fs-small); font-variant-numeric: tabular-nums; }
+.catlist__bar { grid-column: 1 / -1; height: 8px; border-radius: var(--radius-pill); background: var(--raised); }
+.catlist__bar > span { display: block; height: 100%; border-radius: var(--radius-pill); background: var(--data); min-width: 4px; }
+
+.pager { margin-top: var(--gap); }
+.filters { display: flex; flex-wrap: wrap; align-items: center; gap: var(--gap); margin-bottom: var(--gap); }
+.filters .input, .filters .select { min-height: var(--control-height); }
+
+.grid { display: grid; gap: var(--gap); }
+.grid--dash { grid-template-columns: 1fr; align-items: stretch; }
+.card--col { display: flex; flex-direction: column; }
+.card__foot { display: flex; justify-content: space-between; align-items: baseline; gap: var(--gap); margin-top: auto; padding-top: 14px; border-top: 1px solid var(--rule); }
+.card__foot .num { font-weight: 700; }
+@media (min-width: 64rem) { .grid--dash { grid-template-columns: 1.15fr 1fr; } }
+@media (min-width: 64rem) {
+  .table th.col-cycle, .table td.cell--cycle.col-cycle { display: table-cell; }
+  .cell__cyc { display: none; }
+}

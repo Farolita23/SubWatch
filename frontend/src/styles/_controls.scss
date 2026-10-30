@@ -1,0 +1,99 @@
+/* Botones, campos, filtros y marcas de estado */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: var(--control-height); padding: 0 14px;
+  font-size: var(--fs-body); font-weight: 500; line-height: 1; text-decoration: none; white-space: nowrap;
+  color: var(--text); background: var(--surface); border: 1px solid var(--control);
+  border-radius: var(--radius-control);
+  transition: background var(--dur-fast), border-color var(--dur-fast), transform var(--dur-fast) var(--ease);
+  -webkit-user-select: none; user-select: none; touch-action: manipulation;
+}
+.btn:active { transform: scale(var(--press)); }
+.btn[disabled], .btn[aria-disabled='true'] { opacity: 0.55; cursor: not-allowed; transform: none; }
+.btn svg { width: 16px; height: 16px; }
+.btn--primary { color: var(--on-primary); background: var(--primary); border-color: var(--primary); }
+.btn--danger { color: var(--on-negative); background: var(--negative); border-color: var(--negative); }
+.btn--ghost { background: transparent; border-color: transparent; }
+.btn--sm { min-height: 32px; padding: 0 10px; }
+.btn--block { width: 100%; }
+.btn--icon { width: var(--control-height); min-width: var(--control-height); padding: 0; }
+.btn.is-loading { position: relative; color: transparent; pointer-events: none; }
+.btn.is-loading::after {
+  content: ''; position: absolute; width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid var(--text); border-right-color: transparent; animation: spin 0.7s linear infinite;
+}
+.btn--primary.is-loading::after { border-color: var(--on-primary); border-right-color: transparent; }
+.btn--danger.is-loading::after { border-color: var(--on-negative); border-right-color: transparent; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field + .field { margin-top: 16px; }
+.label { font-size: var(--fs-body); font-weight: 500; }
+.label .opt { font-weight: 400; color: var(--muted); }
+.hint { font-size: var(--fs-small); color: var(--muted); }
+.input, .select, .textarea {
+  width: 100%; min-height: 40px; padding: 0 12px; font-size: 1rem;
+  background: var(--surface); color: var(--text);
+  border: 1px solid var(--control); border-radius: var(--radius-control);
+  transition: border-color var(--dur-fast);
+}
+.textarea { min-height: 6rem; padding-block: 10px; resize: vertical; }
+.select {
+  appearance: none; padding-right: 32px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none' stroke='%238a8f97' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+}
+.input::placeholder { color: var(--faint); }
+.input:focus-visible, .select:focus-visible, .textarea:focus-visible { outline: 2px solid var(--text); outline-offset: 0; border-color: var(--text); }
+.input--money { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; }
+.input-group { display: flex; align-items: stretch; }
+.input-group .input { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.input-group__addon {
+  display: inline-flex; align-items: center; padding: 0 12px;
+  background: var(--raised); border: 1px solid var(--control); border-left: 0;
+  border-radius: 0 var(--radius-control) var(--radius-control) 0; color: var(--muted);
+}
+.input.is-invalid, .select.is-invalid, .textarea.is-invalid,
+.input.ng-invalid.ng-touched, .select.ng-invalid.ng-touched, .textarea.ng-invalid.ng-touched { border-color: var(--negative); outline: 1px solid var(--negative); outline-offset: -2px; }
+.field__error { display: flex; gap: 6px; align-items: flex-start; font-size: var(--fs-small); font-weight: 500; color: var(--pill-negative-ink); }
+.field__error::before { content: '!'; flex: none; width: 14px; height: 14px; margin-top: 2px; border-radius: 50%; background: var(--pill-negative-ink); color: var(--surface); font-size: 10px; font-weight: 700; line-height: 14px; text-align: center; }
+.form-grid { display: grid; gap: 16px; }
+.form-grid .field + .field { margin-top: 0; }
+@media (min-width: 40rem) { .form-grid--2 { grid-template-columns: 1fr 1fr; } .form-grid .span-2 { grid-column: 1 / -1; } }
+.form-actions { display: flex; flex-wrap: wrap; gap: var(--gap); justify-content: flex-end; margin-top: 24px; }
+
+/* Filtro: chip. Seleccionado = relleno suave y borde en tinta, sin color */
+.chip {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 32px; padding: 0 12px;
+  font-size: var(--fs-body); font-weight: 400; color: var(--text); white-space: nowrap;
+  background: var(--surface); border: 1px solid var(--control); border-radius: var(--radius-pill);
+  transition: background var(--dur-fast), border-color var(--dur-fast), transform var(--dur-fast) var(--ease);
+  -webkit-user-select: none; user-select: none; touch-action: manipulation;
+}
+button.chip:active { transform: scale(var(--press)); }
+.chip[aria-pressed='true'] { background: var(--active); border-color: var(--text); font-weight: 500; }
+.chip-row { display: flex; gap: 8px; overflow-x: auto; padding-block: 2px; scrollbar-width: thin; }
+
+/* Marca de estado: una por fila. Pares palidos con texto oscuro; 12px, 500 */
+.pill {
+  display: inline-flex; align-items: center; height: 20px; padding: 0 8px; flex: none; white-space: nowrap;
+  font-size: 0.75rem; font-weight: 500; border-radius: var(--radius-pill);
+  background: var(--pill-neutral-bg); color: var(--pill-neutral-ink); border: 1px solid transparent;
+}
+.pill--positive { background: var(--pill-positive-bg); color: var(--pill-positive-ink); }
+.pill--warning { background: var(--pill-warning-bg); color: var(--pill-warning-ink); border-color: var(--warning-border); }
+.pill--negative { background: var(--pill-negative-bg); color: var(--pill-negative-ink); }
+
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover { background: var(--raised); }
+  .btn--primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
+  .btn--danger:hover { filter: brightness(0.92); }
+  .btn--ghost:hover { background: var(--active); }
+  .input:hover, .select:hover, .textarea:hover { border-color: var(--muted); }
+  button.chip:hover { background: var(--raised); }
+  a:hover { text-decoration-thickness: 2px; }
+}
+@media (pointer: coarse) {
+  .btn--sm, .btn--icon, button.chip { min-height: var(--tap); }
+  .btn--icon { min-width: var(--tap); }
+}
