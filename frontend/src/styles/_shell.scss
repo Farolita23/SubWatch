@@ -1,0 +1,63 @@
+/* Shell: rail de iconos de 55px (escritorio) y barra inferior con etiquetas (movil). Sin barra superior. */
+.shell { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
+.shell__nav {
+  position: fixed; inset: auto 0 0 0; z-index: 20;
+  display: flex; justify-content: space-around;
+  background: var(--surface); border-top: 1px solid var(--border);
+  padding: 4px 8px calc(4px + env(safe-area-inset-bottom, 0px));
+}
+.shell__brand { display: none; }
+.shell__main {
+  flex: 1; min-width: 0;
+  padding: calc(var(--pad) + env(safe-area-inset-top, 0px)) 0 calc(5rem + env(safe-area-inset-bottom, 0px));
+}
+.nav-link {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  min-width: var(--tap); min-height: var(--tap); padding: 4px 12px;
+  font-size: var(--fs-small); font-weight: 500; color: var(--muted);
+  text-decoration: none; border-radius: var(--radius-control);
+  transition: color var(--dur-fast), background var(--dur-fast), transform var(--dur-fast) var(--ease);
+  -webkit-touch-callout: none;
+}
+.nav-link:active { transform: scale(var(--press)); }
+.nav-link.active, .nav-link[aria-current='page'] { color: var(--text); background: var(--active); }
+.nav-link svg { width: 16px; height: 16px; }
+.nav-link::after { display: none; }
+
+@media (min-width: 48rem) {
+  .shell { flex-direction: row; }
+  .shell__nav {
+    position: sticky; top: 0; inset: 0 auto auto 0; height: 100vh; height: 100dvh; width: var(--rail-width); flex-shrink: 0;
+    flex-direction: column; justify-content: flex-start; align-items: center; gap: 4px;
+    border-top: 0; border-right: 1px solid var(--border); padding: 14px 0;
+  }
+  .shell__brand {
+    display: flex; align-items: center; justify-content: center; position: relative;
+    width: 36px; height: 36px; margin-bottom: 14px; border-radius: var(--radius-control);
+  }
+  .shell__brand img { width: 28px; height: 28px; }
+  .shell__main { padding: var(--pad) 0; }
+  .nav-link { width: 36px; height: 36px; min-width: 0; min-height: 0; padding: 0; }
+  .nav-link__label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .nav-link--end { margin-top: auto; }
+  /* Tooltip: nombre del destino a la derecha del icono (hover con puntero fino y foco de teclado) */
+  .nav-link[data-tip]::after, .shell__brand[data-tip]::after {
+    content: attr(data-tip); display: block; position: absolute; left: calc(100% + 10px); top: 50%;
+    transform: translateY(-50%); white-space: nowrap; z-index: 30; pointer-events: none;
+    background: var(--primary); color: var(--on-primary); font-size: var(--fs-small); font-weight: 500;
+    padding: 4px 8px; border-radius: var(--radius-control); opacity: 0; visibility: hidden;
+    transition: opacity var(--dur-fast) var(--ease), visibility 0s linear var(--dur-fast);
+  }
+  .nav-link:focus-visible::after, .shell__brand:focus-visible::after { opacity: 1; visibility: visible; transition-delay: 0s; }
+}
+@media (min-width: 48rem) and (hover: hover) and (pointer: fine) {
+  .nav-link:hover::after, .shell__brand:hover::after { opacity: 1; visibility: visible; transition-delay: 0s; }
+  .nav-link:hover { color: var(--text); background: var(--active); }
+}
+
+/* Cabecera de pantalla: titulo 24 + una linea de hallazgo; acciones solo si son reales */
+.page-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--gap); margin-bottom: var(--gap); }
+.page-head > div { min-width: 0; }
+.page-head__line { margin-top: 4px; color: var(--muted); font-size: var(--fs-body); }
+.page-head__line strong { color: var(--text); font-weight: 500; }
